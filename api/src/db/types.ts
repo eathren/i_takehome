@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { fragments, secrets } from "../db/schema";
+import { fragments, secrets } from "./schema";
 
 export type NewSecret = InferInsertModel<typeof secrets>;
 export type Secret = InferSelectModel<typeof secrets>;

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
 import { useState, useCallback } from "react";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/s/$sId")({
   component: RouteComponent,
@@ -17,8 +18,15 @@ function RouteComponent() {
         params: { password },
       });
       setSecret(res.data.content);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error retrieving secret", err);
+      if (axios.isAxiosError(err)) {
+        toast.error(
+          "Error retrieving secret: " + err.response?.data?.error || err.message
+        );
+      } else {
+        toast.error("Error retrieving secret: " + (err as Error).message);
+      }
     }
   }, [sId, password]);
 

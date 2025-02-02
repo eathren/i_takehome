@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
 
 export const Route = createRootRoute({
@@ -14,6 +15,7 @@ function RootComponent() {
       <Outlet />
       {import.meta.env.VITE_TANSTACK_ROUTER_DEVTOOLS === "true" &&
         import.meta.env.MODE === "development" && <TanStackRouterDevtools />}
+      <Toaster />
     </React.Fragment>
   );
 }
