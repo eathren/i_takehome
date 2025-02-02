@@ -1,12 +1,8 @@
-import express from "express";
+const express = require("express");
+import secretRoutes from "./routes/secretRoutes";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(express.json());
+app.use("/api", secretRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
