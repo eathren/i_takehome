@@ -40,8 +40,8 @@ export async function retrieveSecret(
     throw new Error("Invalid password");
 
   const secretParts: Fragment[] = await db.query.fragments.findMany({
-    where: (f, { eq }) => eq(f.id, secretId),
-    orderBy: (f, { asc }) => asc(f.order),
+    where: (f: any, { eq }: any) => eq(f.id, secretId),
+    orderBy: (f: any) => f.order,
   });
 
   return joinSecret(secretParts);
