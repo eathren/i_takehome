@@ -1,6 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
 import { useState, useCallback } from "react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/s/$sId")({
   component: RouteComponent,
@@ -10,6 +18,7 @@ function RouteComponent() {
   const { sId } = Route.useParams();
   const [secret, setSecret] = useState("");
   const [password, setPassword] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const fetchSecret = useCallback(async () => {
     try {
@@ -17,6 +26,7 @@ function RouteComponent() {
         params: { password },
       });
       setSecret(res.data.content);
+      setIsOpen(true);
     } catch (err) {
       console.error("Error retrieving secret", err);
     }
@@ -38,11 +48,25 @@ function RouteComponent() {
       >
         Retrieve Secret
       </button>
-      {secret && (
-        <p className="mt-4">
-          Secret: <span className="text-red-600">{secret}</span>
-        </p>
-      )}
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <button className="hidden">Open Dialog</button>
+        </DialogTrigger>
+        <DialogContent className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
+          <DialogTitle>Secret</DialogTitle>
+          <DialogDescription>
+            <div className="overflow-auto max-h-96">
+              <p className="text-red-600">{secret}</p>
+            </div>
+          </DialogDescription>
+          <DialogClose asChild>
+            <button className="mt-4 bg-blue-600 text-white p-2 rounded">
+              Close
+            </button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
