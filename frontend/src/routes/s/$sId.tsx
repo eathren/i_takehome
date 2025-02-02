@@ -8,7 +8,6 @@ export const Route = createFileRoute("/s/$sId")({
 
 function RouteComponent() {
   const { sId } = Route.useParams();
-  console.log("here", sId);
   const [secret, setSecret] = useState("");
   const [password, setPassword] = useState("");
 
