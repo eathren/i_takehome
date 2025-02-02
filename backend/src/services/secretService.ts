@@ -6,11 +6,13 @@ import { NewFragment, Fragment, Secret, NewSecret } from "../db/types";
 
 export async function storeSecret(
   secret: string,
-  expiresAt: Date,
+  expireTimestamp: string,
   password?: string
 ) {
   const secretId = nanoid(8);
   const secretFragments = splitSecret(secret, 3);
+
+  const expiresAt = new Date(expireTimestamp);
 
   await db
     .insert(secrets)
@@ -36,12 +38,16 @@ export async function retrieveSecret(
   });
 
   if (!secretMeta) throw new Error("Secret not found");
+
+  const now = new Date();
+  if (secretMeta.expiresAt <= now) throw new Error("Secret has expired");
+
   if (secretMeta.password && secretMeta.password !== password)
     throw new Error("Invalid password");
 
   const secretParts: Fragment[] = await db.query.fragments.findMany({
-    where: (f: any, { eq }: any) => eq(f.id, secretId),
-    orderBy: (f: any) => f.order,
+    where: (f, { eq }) => eq(f.id, secretId),
+    orderBy: (f, { asc }) => asc(f.order),
   });
 
   return joinSecret(secretParts);

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import Header from "../components/Header";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -21,11 +22,14 @@ function RouteComponent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const expiresInMinutes = days * 1440 + hours * 60 + minutes;
+    const now = new Date();
+    const expireTimestamp = new Date(
+      now.getTime() + days * 1440 * 60000 + hours * 60 * 60000 + minutes * 60000
+    ).toISOString();
     try {
       const res = await axios.post("http://localhost:3000/api/share", {
         content,
-        expiresInMinutes,
+        expireTimestamp,
         password,
       });
       setLink(res.data.link);
@@ -36,6 +40,7 @@ function RouteComponent() {
 
   return (
     <div>
+      <Header />
       <div className="max-w-lg mx-auto mt-20 p-6 bg-white shadow-md rounded-md">
         <h2 className="text-2xl font-bold mb-4">Share a Secret</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
