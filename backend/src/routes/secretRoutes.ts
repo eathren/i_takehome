@@ -10,8 +10,9 @@ router.post("/share", async (req, res) => {
     expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
     const secretId = await storeSecret(content, expiresAt, password);
-    res.json({ link: `http://localhost:3000/share/${secretId}` });
+    res.json({ link: `http://localhost:5173/s/${secretId}` });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: (err as Error).message });
   }
 });
