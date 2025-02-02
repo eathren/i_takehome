@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import Header from "../components/Header";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -40,7 +39,6 @@ function RouteComponent() {
 
   return (
     <div>
-      <Header />
       <div className="max-w-lg mx-auto mt-20 p-6 bg-white shadow-md rounded-md">
         <h2 className="text-2xl font-bold mb-4">Share a Secret</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
