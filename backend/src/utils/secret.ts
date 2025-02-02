@@ -5,7 +5,9 @@ export function splitSecret(secret: string, parts: number): string[] {
   );
 }
 
-export function joinSecret(fragments: { content: string }[]): string {
+export function joinSecret(
+  fragments: { content: string; order: number }[]
+): string {
   return fragments
     .sort((a, b) => a.order - b.order)
     .map((f) => f.content)
