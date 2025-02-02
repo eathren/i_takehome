@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.post("/share", async (req, res) => {
   try {
-    const { content, expiresInDays, password } = req.body;
+    const { content, expiresInMinutes, password } = req.body;
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+    expiresAt.setMinutes(expiresAt.getMinutes() + expiresInMinutes);
 
     const secretId = await storeSecret(content, expiresAt, password);
     res.json({ link: `http://localhost:5173/s/${secretId}` });
