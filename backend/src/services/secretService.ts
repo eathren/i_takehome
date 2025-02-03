@@ -2,7 +2,10 @@ import { db } from "../db";
 import { secrets, fragments } from "../db/schema";
 import { splitSecret, joinSecret } from "../utils/secret";
 import { nanoid } from "nanoid";
+import bcrypt from "bcrypt";
 import { NewFragment, Fragment, Secret, NewSecret } from "../db/types";
+
+const SALT_ROUNDS = 10;
 
 export async function storeSecret(
   secret: string,
@@ -14,9 +17,14 @@ export async function storeSecret(
 
   const expiresAt = new Date(expireTimestamp);
 
+  let hashedPassword = null;
+  if (password) {
+    hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  }
+
   await db
     .insert(secrets)
-    .values([{ id: secretId, expiresAt, password: password ?? null }]);
+    .values([{ id: secretId, expiresAt, password: hashedPassword }]);
 
   await Promise.all(
     secretFragments.map((fragment, i) =>
@@ -42,8 +50,13 @@ export async function retrieveSecret(
   const now = new Date();
   if (secretMeta.expiresAt <= now) throw new Error("Secret has expired");
 
-  if (secretMeta.password && secretMeta.password !== password)
-    throw new Error("Invalid password");
+  if (secretMeta.password) {
+    const isPasswordValid = await bcrypt.compare(
+      password ?? "",
+      secretMeta.password
+    );
+    if (!isPasswordValid) throw new Error("Invalid password");
+  }
 
   const secretParts: Fragment[] = await db.query.fragments.findMany({
     where: (f, { eq }) => eq(f.id, secretId),
