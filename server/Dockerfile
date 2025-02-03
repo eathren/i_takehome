@@ -1,5 +1,5 @@
 # Base layer
-FROM node:20-alpine
+FROM node:22-alpine
 
 # Set the working directory 
 WORKDIR /app
@@ -16,8 +16,5 @@ RUN pnpm install --ignore-scripts
 # Copy all files 
 COPY . .
 
-# Install nodemon globally
-RUN pnpm install -g nodemon
-
-# Start the application
-CMD ["pnpm", "run", "dev"]
+# Run migrations and start the server
+CMD ["pnpm", "dev"]
