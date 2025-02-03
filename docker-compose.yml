@@ -17,37 +17,5 @@ services:
       timeout: 5s
       retries: 5
 
-  server:
-    container_name: dev-api
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file: ./server/.env
-    ports:
-      - 8000:8000
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgres://user:password@db:5432/mydb
-    volumes:
-      - ./server/src:/app/src
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  client:
-    container_name: dev-client
-    restart: unless-stopped
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - 5173:5173
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    env_file: .env
-
 volumes:
   pgdata:

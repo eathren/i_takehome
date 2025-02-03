@@ -1,9 +1,9 @@
 import { db } from "../db";
 import { secrets, fragments } from "../db/schema";
 import { splitSecret, joinSecret } from "../utils/secret";
-import { nanoid } from "nanoid";
 import bcrypt from "bcrypt";
 import { NewFragment, Fragment, Secret, NewSecret } from "../db/types";
+import { nanoid } from "nanoid";
 
 const SALT_ROUNDS = 10;
 

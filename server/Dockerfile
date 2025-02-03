@@ -16,5 +16,11 @@ RUN pnpm install --ignore-scripts
 # Copy all files 
 COPY . .
 
+# Build the TypeScript files
+RUN pnpm run build
+
+# Expose the port
+EXPOSE 3000
+
 # Run migrations and start the server
-CMD ["pnpm", "dev"]
+CMD ["sh", "-c", "pnpm  migrate && pnpm build && pnpm start"]
