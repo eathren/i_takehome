@@ -7,6 +7,14 @@
 
 ## Running the Project
 
+### Database
+
+1. Create a `.env` file with the following content:
+   DATABASE_URL=postgres://user:password@db:5432/mydb
+
+2. Build and run the server service using Docker Compose:
+   `docker-compose up -d`
+
 ### server
 
 1. Navigate to the `server` directory:
@@ -15,35 +23,35 @@
 2. Create a `.env` file with the following content:
    DATABASE_URL=postgres://user:password@db:5432/mydb
 
-3. Build and run the server service using Docker Compose:
-   docker-compose up -d
+3. Build and run the server service using pnpm:
+   `pnpm dev`
 
 ### client
 
 1. Navigate to the `client` directory:
-   cd client
+   `cd client`
 
-2. Create a `.env` file with the necessary environment variables.
+2. Create a `.env` file with the necessary environment variables. (Optional)
 
-3. Build and run the client service using Docker Compose:
-   docker-compose up -d
+3. Build the client using pnpm
+   `pnpm dev`
 
 ## Drizzle Kit Migrations
 
 ### Generating Migrations
 
 1. Navigate to the `server` directory:
-   cd server
+   `cd server`
 
 2. Create a migration script using Drizzle Kit:
-   npx drizzle-kit generate
+   `npx drizzle-kit generate`
 
 ### Applying Migrations
 
 1. Ensure that the `DATABASE_URL` environment variable is set in your `.env` file.
 
 2. Run the migration script:
-   pnpm run migrate
+   `pnpm run migrate`
 
 ## Accessing the Application
 
