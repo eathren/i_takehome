@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -15,7 +16,7 @@ function RouteComponent() {
   const [content, setContent] = useState("");
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
+  const [minutes, setMinutes] = useState(1);
   const [password, setPassword] = useState("");
   const [link, setLink] = useState("");
 
@@ -33,6 +34,13 @@ function RouteComponent() {
       });
       setLink(res.data.link);
     } catch (err) {
+      if (axios.isAxiosError(err)) {
+        toast.error(
+          "Error sharing secret: " + err.response?.data?.error || err.message
+        );
+      } else {
+        toast.error("Error sharing secret: " + (err as Error).message);
+      }
       console.error("Error sharing secret", err);
     }
   };
@@ -86,7 +94,7 @@ function RouteComponent() {
                   type="number"
                   className="w-full p-2 border rounded"
                   placeholder="Minutes"
-                  min="0"
+                  min="1"
                   value={minutes}
                   onChange={(e) => setMinutes(Number(e.target.value))}
                 />

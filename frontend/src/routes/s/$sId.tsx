@@ -9,6 +9,8 @@ import {
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/s/$sId")({
   component: RouteComponent,
@@ -27,8 +29,15 @@ function RouteComponent() {
       });
       setSecret(res.data.content);
       setIsOpen(true);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error retrieving secret", err);
+      if (axios.isAxiosError(err)) {
+        toast.error(
+          "Error retrieving secret: " + err.response?.data?.error || err.message
+        );
+      } else {
+        toast.error("Error retrieving secret: " + (err as Error).message);
+      }
     }
   }, [sId, password]);
 
@@ -57,13 +66,13 @@ function RouteComponent() {
           <DialogTitle>Secret</DialogTitle>
           <DialogDescription>
             <div className="overflow-auto max-h-96">
-              <p className="text-red-600">{secret}</p>
+              <p className="text-black">{secret}</p>
             </div>
           </DialogDescription>
           <DialogClose asChild>
-            <button className="mt-4 bg-blue-600 text-white p-2 rounded">
+            <Button className="mt-4 bg-blue-600 text-white p-2 rounded">
               Close
-            </button>
+            </Button>
           </DialogClose>
         </DialogContent>
       </Dialog>
